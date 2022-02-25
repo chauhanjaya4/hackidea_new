@@ -81,10 +81,10 @@ WSGI_APPLICATION = 'django_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql ',
         'NAME': 'blog',
-        'USER': '',
-        'Password': '',
+        'USER': 'postgres',  
+        'PASSWORD': 'Jamshedpur',
         'HOST': 'localhost '
     }
 }
