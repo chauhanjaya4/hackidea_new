@@ -22,7 +22,7 @@ class Categories(models.TextChoices):
     class BlogPost(models.Model):
         title = models.CharField(max_length=50)
         slug = models.SlugField()
-        category = models.CharField(max_length=50)
+        category = models.CharField(max_length=50,choices=Categories.choices, default=Categories.WORLD    )
         thumbnail = models.ImageField(upload_to='photos/%Y/%m/%d/')
         excerpt = models.CharField(max_length=150)
         month = models.CharField(max_length=3)
@@ -40,14 +40,21 @@ class Categories(models.TextChoices):
                 slug = original_slug + '_' + str(count)
                 count += 1
                 queryset = BlogPost.object.all().filter(slug_iexact=original_slug).count()
-
+#first-blog-post
                 self.slug = slug
 
                 if self.featured:
                     try:
                         temp = BlogPost.objects.get(featured=True)
                         if self != temp: 
+                            temp.featured = False
+                            temp.save()
+                        except BlogPost.DoesNotExist:
+                            pass
+                        super(BlogPost, self).save(*args, **kwargs)
+                        
+def __str__(self):
+    return self.title
+                         
 
-                        except
 
-# Create your models here.

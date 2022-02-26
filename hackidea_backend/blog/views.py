@@ -1,39 +1,36 @@
-from django.shortcuts import render
-from django.http import HttpResponse
- 
-posts = [
-{
-     'author': 'CoreyMS',
-     'title' : 'Blog Post 1',
-     'content' : 'First post content',
-     'date_posted' : 'August 27, 2022'
-},
-{
-     'author': 'Jane Doe',
-     'title' : 'Blog Post 2',
-     'content' : 'Second post content',
-     'date_posted' : 'August 28, 2022'
-},
+from rest_framework.response import Response
+from rest_framework.response import permissions
+from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView
+from blog.models import BlogPost
+from blog.serializers import BlogPostSerializer
 
-]
-def index(request):
-     context = {
-          'posts': posts
-     }
-     return render(request,'blog/index.html',context)
+class BlogPostListView(ListAPIView):
+     queryset = BlogPost.objects.order_by('-date_created')
+     serializer_class = BlogPostSerializer
+     lookup_field = 'slug'
+     permission_classes = (permissions,AllowAny,)
 
-def about(request):
-     return render(request,'blog/about.html', {'title':'About'})
+class BlogPostDetailView(RetrieveAPIView):
+     queryset = BlogPost.objects.order_by('-date_created')
+     serializer_class = BlogPostSerializer
+     lookup_field ='slug'
+     permission_classes = (permissions.AllowAny,)
 
-def posts(request):
-     return HttpResponse('<h1>My Posts</h1>')
+class BlogPostFeaturedView(ListAPIView):
+     queryset = BlogPost.objects.all().filter(featured=True)
+     serializer_class = BlogPostSerializer
+     lookup_field ='slug'
+     permission_classes = (permissions.AllowAny, )     
+class BlogPostCategoryView(APIView):
+     
+     serializer_class = BlogPostSerializer
+     
+     permission_classes = (permissions.AllowAny, )
+def post(self, request, format=None):
+      data = self.request.data
+      category = data['category']
+      queryset = BlogPost.objects.order_by('-date_created').filter(category_iexact=category )
+      serializer = BlogPostSerializer(queryset, many=True)
 
-def reachme(request):
-     return HttpResponse('<h1>Reach Me</h1>')
-
-def whatsnew(request):
-     return HttpResponse('<h1>Whats New</h1>')
-def signup(request):
-     return HttpResponse('<h1>Sign Up</h1>')     
-
-
+      return Response(serializer.data)
