@@ -2,6 +2,8 @@ from django.db import models
 from datetime import datetime
 from django.template.defaultfilters import slugify
 
+class Categories(models.TextChoices);
+
 class BlogPost(models.Model):
     title = models.CharField(max_length=50)
     slug = models.SlugField()
