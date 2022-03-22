@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'django_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql  ',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'hackidea',
         'USER': 'postgres',
         'PASSWORD': 'password123',
